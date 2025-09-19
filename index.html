@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Control de Asistencia - Colegio Buen Pastor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-tr from-blue-100 via-white to-blue-200 min-h-screen p-6">
+  <!-- Header arriba del todo con mejor diseño, sin logo -->
+  <header class="flex flex-col items-center justify-center mb-8">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900 mt-4 text-center drop-shadow-lg">
+      Escuela Laboral<br>
+      <span class="text-blue-800">El Buen Pastor</span> <span class="text-red-600 italic">Renacer</span>
+    </h1>
+    <span class="mt-2 text-lg text-gray-700 italic">Formando valores, construyendo futuro</span>
+  </header>
+
+  <!-- Contenedor principal blanco -->
+  <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-6">
+    <div id="header-actions" class="text-right mb-4"></div>
+    <div id="msg" class="mb-4"></div>
+
+    <div id="main">
+      <!-- Login -->
+      <section id="login-section" class="space-y-4">
+        <h2 class="font-semibold text-lg text-blue-800">Iniciar sesión</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-end">
+          <div>
+            <label class="block text-sm font-medium">Cédula / Pasaporte</label>
+            <input id="login-id" class="w-full p-2 border rounded" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Contraseña</label>
+            <input id="login-password" type="password" class="w-full p-2 border rounded" />
+          </div>
+          <div class="flex gap-2">
+            <button id="btn-login" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition">Ingresar</button>
+            <button id="btn-show-register" class="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition">Crear usuario</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Registro -->
+      <section id="register-section" class="mt-6 hidden">
+        <h2 class="font-semibold text-lg text-blue-800">Crear usuario</h2>
+        <form id="register-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="font-medium">Nombre</label>
+            <input name="nombre" class="w-full p-2 border rounded" required />
+          </div>
+          <div>
+            <label class="font-medium">Apellido</label>
+            <input name="apellido" class="w-full p-2 border rounded" required />
+          </div>
+          <div>
+            <label class="font-medium">Cédula o Pasaporte</label>
+            <input name="idNumber" class="w-full p-2 border rounded" required />
+          </div>
+          <div>
+            <label class="font-medium">Teléfono</label>
+            <input name="telefono" class="w-full p-2 border rounded" required />
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-medium">Dirección</label>
+            <input name="direccion" class="w-full p-2 border rounded" required />
+          </div>
+          <div>
+            <label class="font-medium">Es profesor o estudiante?</label>
+            <select name="esProfesor" class="w-full p-2 border rounded">
+              <option value="estudiante">Estudiante</option>
+              <option value="profesor">Profesor</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-medium">¿Es mayor de edad?</label>
+            <select name="mayorEdad" class="w-full p-2 border rounded">
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-medium">Edad</label>
+            <input name="edad" class="w-full p-2 border rounded" required />
+          </div>
+          <div>
+            <label class="font-medium">Contraseña</label>
+            <input name="password" type="password" class="w-full p-2 border rounded" required />
+          </div>
+          <div>
+            <label class="font-medium">Confirmar contraseña</label>
+            <input name="confirmPassword" type="password" class="w-full p-2 border rounded" required />
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-medium">Foto (imagen)</label>
+            <input name="foto" id="foto-input" type="file" accept="image/*" class="w-full p-2 border rounded" />
+            <div id="foto-preview" class="mt-2"></div>
+          </div>
+          <div class="md:col-span-2 text-right">
+            <button type="submit" class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition">Crear usuario</button>
+            <button type="button" id="btn-cancel-register" class="ml-2 px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 transition">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Dashboard -->
+      <section id="dashboard" class="mt-6 hidden">
+        <h2 class="text-xl font-semibold mb-4 text-blue-800">Panel de Asistencia</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Form asistencia -->
+          <div class="p-4 border rounded bg-blue-50">
+            <h3 class="font-medium mb-2">Registrar asistencia</h3>
+            <form id="attendance-form" class="space-y-3">
+              <div>
+                <label class="font-medium">Seleccionar profesor</label>
+                <select id="profesor-select" class="w-full p-2 border rounded"></select>
+              </div>
+              <div class="flex gap-2">
+                <div class="flex-1">
+                  <label class="font-medium">Tipo de asistencia</label>
+                  <select id="tipo-select" class="w-full p-2 border rounded">
+                    <option value="PRESENCIAL">Presencial</option>
+                    <option value="VIRTUAL">Virtual</option>
+                  </select>
+                </div>
+                <div class="flex-1">
+                  <label class="font-medium">Asignatura</label>
+                  <select id="asignatura-select" class="w-full p-2 border rounded"></select>
+                </div>
+              </div>
+              <div>
+                <label class="font-medium">Nivel (obligatorio)</label>
+                <input id="nivel-input" class="w-full p-2 border rounded" required />
+              </div>
+              <div>
+                <label class="font-medium">Observación (opcional)</label>
+                <input id="obs-input" class="w-full p-2 border rounded" />
+              </div>
+              <div class="text-right">
+                <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition">Listo</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Registros -->
+          <div class="p-4 border rounded bg-blue-50">
+            <h3 class="font-medium mb-2">Registros recientes</h3>
+            <div id="records-list" class="max-h-64 overflow-auto text-sm mb-4"></div>
+            <div class="flex gap-2">
+              <button id="btn-download" class="px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 transition">Descargar / Imprimir</button>
+              <button id="btn-logout" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 transition">Cerrar sesión</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Versículo al final en fondo celeste -->
+  <div class="bg-blue-200 w-full py-6 mt-8">
+    <p class="text-center italic text-blue-900 text-lg">
+      Proverbios 3:5-6: Confía en el Señor con todo tu corazón, y no te apoyes en tu propia prudencia. Reconócelo en todos tus caminos, y él allanará tus sendas.
+    </p>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const PROFESSORS = [
+      "ALDO MEDINA","CRISTELA WILLIAMS","NILKA ZAPATEIRO",
+      "ABDIEL ALONSO","EDUARDO JIMENEZ","MILITZA AYALA",
+      "KAREN DIXON","ALDAIR RODRIGUEZ"
+    ];
+    const SUBJECTS = [
+      "INGLES","INGLES CONVERSACIONAL","ESPAÑOL","MATEMATICA","FISICA","QUIMICA",
+      "LOGICA","GEO. DE PANAMA","EDU. FISICA","BELLAS ARTES","ETICA LABORAL","HIST. DE PANAMA","INFORMATICA"
+    ];
+
+    function save(key,value){localStorage.setItem(key,JSON.stringify(value))}
+    function load(key,fallback){try{const r=localStorage.getItem(key);return r?JSON.parse(r):fallback}catch(e){return fallback}}
+
+    let users = load('as_users', []);
+    let records = load('as_attendance', []);
+    let currentUser = null;
+    let fotoDataUrl = null;
+
+    const msgEl = document.getElementById('msg');
+    const loginId = document.getElementById('login-id');
+    const loginPassword = document.getElementById('login-password');
+    const btnLogin = document.getElementById('btn-login');
+    const btnShowRegister = document.getElementById('btn-show-register');
+    const registerSection = document.getElementById('register-section');
+    const loginSection = document.getElementById('login-section');
+    const registerForm = document.getElementById('register-form');
+    const btnCancelRegister = document.getElementById('btn-cancel-register');
+    const fotoInput = document.getElementById('foto-input');
+    const fotoPreview = document.getElementById('foto-preview');
+    const profesorSelect = document.getElementById('profesor-select');
+    const asignaturaSelect = document.getElementById('asignatura-select');
+    const attendanceForm = document.getElementById('attendance-form');
+    const recordsList = document.getElementById('records-list');
+    const btnDownload = document.getElementById('btn-download');
+    const btnLogout = document.getElementById('btn-logout');
+    const headerActions = document.getElementById('header-actions');
+
+    function showMsg(text,type='info'){
+      const color=type==='error'?'bg-red-100 text-red-700':type==='success'?'bg-green-100 text-green-700':'bg-gray-100 text-gray-700';
+      msgEl.innerHTML=`<div class="p-2 rounded ${color}">${text}</div>`;
+      setTimeout(()=>{msgEl.innerHTML='';},5000);
+    }
+
+    function refreshHeader(){
+      headerActions.innerHTML=currentUser?`<div class="text-sm">Usuario: <strong>${currentUser.nombreCompleto}</strong> (${currentUser.esProfesor})</div>`:'';
+    }
+
+    function fillProfesorOptions(){
+      profesorSelect.innerHTML='<option value="">-- Seleccione --</option>';
+      PROFESSORS.forEach(p=>{
+        const opt=document.createElement('option');
+        opt.value=p;
+        opt.textContent=p;
+        profesorSelect.appendChild(opt);
+      });
+    }
+
+    function fillAsignaturas(){
+      asignaturaSelect.innerHTML='';
+      SUBJECTS.forEach(s=>{
+        const opt=document.createElement('option');
+        opt.value=s;
+        opt.textContent=s;
+        asignaturaSelect.appendChild(opt);
+      });
+    }
+
+    function renderRecords(){
+      if(records.length===0){
+        recordsList.innerHTML='<div class="text-gray-600">No hay registros aún.</div>';
+        return;
+      }
+      const rows = records.slice(0,50).map(r=>`
+        <div class="border-t py-2">
+          <div class="text-xs text-gray-500">${r.fecha} ${r.hora}</div>
+          <div><strong>${r.actorNombre}</strong> (${r.actorTipo}) - ${r.profesor} - ${r.asignatura} - ${r.tipo} - Nivel:${r.nivel}</div>
+        </div>
+      `);
+      recordsList.innerHTML = rows.join('');
+    }
+
+    function formatDate(d){return d.toLocaleDateString();}
+    function formatTime(d){return d.toLocaleTimeString();}
+
+    // Eventos
+    btnShowRegister.addEventListener('click', ()=>{
+      registerSection.classList.remove('hidden');
+      loginSection.classList.add('hidden');
+    });
+    btnCancelRegister.addEventListener('click', ()=>{
+      registerSection.classList.add('hidden');
+      loginSection.classList.remove('hidden');
+    });
+
+    fotoInput.addEventListener('change', e=>{
+      const file=e.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = () => {
+          fotoDataUrl = reader.result;
+          fotoPreview.innerHTML=`<img src="${fotoDataUrl}" class="h-24 w-24 object-contain rounded"/>`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    registerForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const f = new FormData(registerForm);
+      if(f.get('password')!==f.get('confirmPassword')){
+        showMsg('Las contraseñas no coinciden','error');
+        return;
+      }
+      const newUser = {
+        id: f.get('idNumber'),
+        nombre: f.get('nombre'),
+        apellido: f.get('apellido'),
+        nombreCompleto:`${f.get('nombre')} ${f.get('apellido')}`,
+        telefono: f.get('telefono'),
+        direccion: f.get('direccion'),
+        esProfesor: f.get('esProfesor'),
+        mayorEdad: f.get('mayorEdad'),
+        edad: f.get('edad'),
+        password: f.get('password'),
+        foto: fotoDataUrl
+      };
+      users.push(newUser);
+      save('as_users',users);
+      showMsg('Usuario creado correctamente','success');
+      registerForm.reset();
+      fotoPreview.innerHTML='';
+      fotoDataUrl=null;
+      registerSection.classList.add('hidden');
+      loginSection.classList.remove('hidden');
+    });
+
+    btnLogin.addEventListener('click', ()=>{
+      const user = users.find(u=>u.id===loginId.value && u.password===loginPassword.value);
+      if(!user){ showMsg('Usuario o contraseña incorrectos','error'); return; }
+      currentUser=user;
+      loginSection.classList.add('hidden');
+      registerSection.classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      fillProfesorOptions();
+      fillAsignaturas();
+      refreshHeader();
+      renderRecords();
+    });
+
+    btnLogout.addEventListener('click', ()=>{
+      currentUser=null;
+      document.getElementById('dashboard').classList.add('hidden');
+      loginSection.classList.remove('hidden');
+      refreshHeader();
+    });
+
+    attendanceForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      if(!profesorSelect.value || !asignaturaSelect.value || !document.getElementById('nivel-input').value){
+        showMsg('Debe completar todos los campos obligatorios','error');
+        return;
+      }
+      const now = new Date();
+      const record = {
+        actorNombre: currentUser.nombreCompleto,
+        actorTipo: currentUser.esProfesor,
+        profesor: profesorSelect.value,
+        asignatura: asignaturaSelect.value,
+        tipo: document.getElementById('tipo-select').value,
+        nivel: document.getElementById('nivel-input').value,
+        fecha: formatDate(now),
+        hora: formatTime(now),
+        observacion: document.getElementById('obs-input').value
+      };
+      records.push(record);
+      save('as_attendance',records);
+      showMsg('Asistencia registrada','success');
+      attendanceForm.reset();
+      renderRecords();
+    });
+
+    btnDownload.addEventListener('click', ()=>{
+      if(currentUser?.esProfesor!=='profesor'){
+        showMsg('Solo los profesores pueden descargar los registros','error');
+        return;
+      }
+      let content = `Reporte de asistencia - ${formatDate(new Date())}\n\n`;
+      records.forEach(r=>{
+        content+=`${r.fecha} ${r.hora} - ${r.actorNombre} (${r.actorTipo}) - ${r.profesor} - ${r.asignatura} - ${r.tipo} - Nivel:${r.nivel}\n`;
+      });
+      const blob = new Blob([content], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'reporte_asistencia.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  });
+  </script>
+
+</body>
+</html>
